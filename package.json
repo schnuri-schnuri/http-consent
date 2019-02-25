@@ -1,0 +1,37 @@
+{
+  "name": "@schnuri/http-consent",
+  "version": "2.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schnuri-schnuri/http-consent.git"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "vocabulary.js"
+  ],
+  "dependencies": {
+    "on-headers": "^1.0.2",
+    "vary": "^1.1.2"
+  },
+  "description": "Reads http Accept-privacy headers and adds privacy headers to http response.",
+  "bugs": {
+    "url": "https://github.com/schnuri-schnuri/http-consent/issues"
+  },
+  "homepage": "https://github.com/schnuri-schnuri/http-consent#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gdpr",
+    "epr",
+    "privacy",
+    "web",
+    "protocol",
+    "http",
+    "content",
+    "negotiation"
+  ],
+  "author": "Juri Welz",
+  "license": "MIT"
+}
