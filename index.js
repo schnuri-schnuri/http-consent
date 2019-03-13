@@ -10,7 +10,7 @@ const vary = require("vary");
  */
 exports.readPrivacyHeader = function (req, res, next) {
 
-    const headerValue = req.header("accept-privacy");
+    const headerValue = req.header(vocabulary.consentHeader);
     if(! headerValue){
         req.consent = {preferenceSent: false};
     } else{
@@ -18,7 +18,7 @@ exports.readPrivacyHeader = function (req, res, next) {
     }
 
     res.locals.ask = []; //later, we can add consent requests here
-    res.locals.dataCollection = []; //for logging of data collection
+    res.locals.dataCollectionLog = []; //for logging of data collection
     onHeaders(res, setConsentResponseHeader);
 
     next();
@@ -158,7 +158,7 @@ function setConsentResponseHeader(){
         return;
     }
     if(this.locals.ask.length === 0){
-        this.set('privacy', 'ACK');
+        this.set(vocabulary.ackHeader, 'ACK');
         return;
     }
 
@@ -171,8 +171,8 @@ function setConsentResponseHeader(){
     responseString += "}";
     console.log(responseString);
 
-    this.set('privacy', responseString);
-    vary(this, 'accept-privacy');
+    this.set(vocabulary.ackHeader, responseString);
+    vary(this, vocabulary.consentHeader);
 }
 
 /**
