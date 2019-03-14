@@ -159,6 +159,7 @@ function setConsentResponseHeader(){
     }
     if(this.locals.ask.length === 0){
         this.set(vocabulary.ackHeader, 'ACK');
+        vary(this, vocabulary.consentHeader);
         return;
     }
 
@@ -250,22 +251,27 @@ function disassembleHeaderString(str) {
         return new ConsentObject();
     }
 
-    const regexIncludingCurlyBraces = /{([^}]+)}/gi;
+    try {
+        const regexIncludingCurlyBraces = /{([^}]+)}/gi;
 
-    const consentObject = new ConsentObject();
+        const consentObject = new ConsentObject();
 
-    const stringParts = str.match(regexIncludingCurlyBraces);
-    stringParts.forEach(function(stringPart) {
-        if(stringPart.includes("global-tracking")) {
-            disassembleTrackingString(stringPart, consentObject);
-        }
-        else{
-            disassembleSettingString(stringPart, consentObject);
-        }
+        const stringParts = str.match(regexIncludingCurlyBraces);
+        stringParts.forEach(function(stringPart) {
+            if(stringPart.includes("global-tracking")) {
+                disassembleTrackingString(stringPart, consentObject);
+            }
+            else{
+                disassembleSettingString(stringPart, consentObject);
+            }
 
-    });
+        });
 
-    return consentObject;
+        return consentObject;
+    } catch(e) {
+        console.error("Something wrent wrong while parsing. Assuming that no consent was given.");
+        return new ConsentObject();
+    }
 }
 
 
@@ -291,8 +297,8 @@ function disassembleSettingString(string, object){
             purposes.push(element);
             return;
         }
-
         console.error("unknown element: " + element);
+        throw "unknown element";
     });
 
     categories.forEach(function(category){
